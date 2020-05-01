@@ -1,0 +1,3 @@
+rootProject.name='RxCacheProSample'
+include ':app'
+include ':cachepro-rxjava'
