@@ -12,7 +12,7 @@ If you are already using RxJava2 for network calls, you can optimize your API ca
 ###### Add the dependency to your `build.gradle`:
 
 ```groovy
-implementation 'com.pv-libs.RxCachePro:RxCachePro:0.0.1'
+implementation 'com.pv-libs.RxCachePro:RxCachePro:0.1.0'
 ```
 
 Setup
