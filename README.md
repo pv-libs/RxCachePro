@@ -17,7 +17,7 @@ implementation 'com.pv-libs.RxCachePro:RxCachePro:0.0.1'
 
 Setup
 ---
-####1. Initializing ``OkHttpClient``
+#### 1. Initializing ``OkHttpClient``
  - Create an instance of ``CachePro``
  - attach the cachePro instance to ``OkHttpClient.Builder`` as shown
 ```kotlin
@@ -32,7 +32,7 @@ val okHttpClient = OkHttpClient.Builder()
     .build()
 ```
 
-####2. Initializing ``Retorfit``
+#### 2. Initializing ``Retorfit``
  - Set the above created ``okHttpClient`` as client.
  - ``RxCacheProCallAdapter.Factory`` should be the first CallAdapterFactory added to retrofit
  - then you also need to add another CallAdapterFactory which supports RxJava2
@@ -48,7 +48,7 @@ val retrofit = Retrofit.Builder()
 
 ## Features
 
-####1) Observable from retrofit 
+#### 1) Observable from retrofit 
 
 Modify return type of your API call to ``Observable<Response<NetworkResponse>>``
 
@@ -58,7 +58,7 @@ which ``onSubscribe`` provides the cache response immediately and in background 
 fun getUsersListObservable(): Observable<Response<GetUsersResponse>>
 ```
 
-####2) RxApiCaller
+#### 2) RxApiCaller
 Modify return type of your API call to ``RxApiCaller<NetworkResponse>``
 
 **RxApiCaller** provides an ``Observable`` and a function ``fetchFromServer()`` which enables you to implement features like swipe to refresh much more efficiently.
@@ -103,11 +103,11 @@ class UsersViewModel : ViewModel{
 ```
 Checkout the given sample 'RxSampleActivity'
 
-####2) Instant Offline Support
+#### 2) Instant Offline Support
 If application makes a ``GET`` request when device is not connected to any network, RxCachePro will make retrofit check if there is any data in ``CACHE`` and return it.  
 
 
-####3) Ability to Force Cache
+#### 3) Ability to Force Cache
 RxCachePro provides ability to force every ``GET`` request to use **Cache**, if your api responses doesn't contain **Cache-Control**.
 
 This applies to every ``GET`` API request, to disable cache for specific API use ``@ApiNoCache`` 
