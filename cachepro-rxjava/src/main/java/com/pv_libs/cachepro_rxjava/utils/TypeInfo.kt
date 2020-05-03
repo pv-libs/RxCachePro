@@ -1,7 +1,7 @@
 package com.pv_libs.cachepro_rxjava.utils
 
 import com.pv_libs.cachepro_rxjava.ApiResult
-import com.pv_libs.cachepro_rxjava.RxApiCaller
+import com.pv_libs.cachepro_rxjava.api_caller.RxApiCaller
 import io.reactivex.Observable
 import retrofit2.Response
 import java.lang.reflect.Type

@@ -1,9 +1,9 @@
 package com.pv_libs.rxcachepro_sample.network
 
 import android.content.Context
-import com.pv_libs.cachepro_rxjava.adapters.RxApiCallerAdapter
-import com.pv_libs.cachepro_rxjava.interceptors.CacheProInterceptor
-import com.pv_libs.cachepro_rxjava.interceptors.CacheProNetworkInterceptor
+import com.pv_libs.cachepro_rxjava.CachePro
+import com.pv_libs.cachepro_rxjava.adapters.RxCacheProCallAdapter
+import com.pv_libs.cachepro_rxjava.attachCachePro
 import com.readystatesoftware.chuck.ChuckInterceptor
 import okhttp3.Cache
 import okhttp3.OkHttpClient
@@ -14,7 +14,7 @@ import java.io.File
 
 object Retrofit {
 
-    private const val CACHE_SIZE = 50 * 1024 * 1020 // 50MB
+    private const val CACHE_SIZE = 100 * 1024 * 1020 // 50MB
 
     fun getRxApiService(context: Context): RxApiService {
         return provideRetrofit(context.applicationContext)
@@ -25,7 +25,7 @@ object Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://reqres.in")
             .client(provideOkHttpClient(context))
-            .addCallAdapterFactory(RxApiCallerAdapter.Factory())
+            .addCallAdapterFactory(RxCacheProCallAdapter.Factory())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -37,14 +37,15 @@ object Retrofit {
 
         val okHttpClientBuilder = OkHttpClient.Builder()
 
-        okHttpClientBuilder.addInterceptor(CacheProInterceptor(context))
-        okHttpClientBuilder.addNetworkInterceptor(CacheProNetworkInterceptor())
+        okHttpClientBuilder.cache(cache)
+
+        val cachePro = CachePro.Builder(context).build()
+        okHttpClientBuilder.attachCachePro(cachePro)
 
         // For observing api calls with GUI
         okHttpClientBuilder.addInterceptor(ChuckInterceptor(context))
         okHttpClientBuilder.addNetworkInterceptor(ChuckInterceptor(context))
 
-        okHttpClientBuilder.cache(cache)
 
         return okHttpClientBuilder.build()
     }

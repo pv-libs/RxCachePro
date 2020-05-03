@@ -1,32 +1,22 @@
 package com.pv_libs.cachepro_rxjava.annotations
 
-
-@Target(AnnotationTarget.FUNCTION)
-@MustBeDocumented
-internal annotation class ApiCache
-
-@Target(AnnotationTarget.FUNCTION)
-@MustBeDocumented
-internal annotation class ApiNoCache
-
-
 internal class Annotations {
-    private val apiNoCacheAnnotation: ApiNoCache by lazy {
-        Annotations::class.java.getDeclaredMethod("getApiNoCache")
-            .getAnnotation(ApiNoCache::class.java)
+    private val forceNetworkCallAnnotation: ForceNetworkCall by lazy {
+        Annotations::class.java.getDeclaredMethod("getForceNetworkCall")
+            .getAnnotation(ForceNetworkCall::class.java)
     }
 
-    private val apiCacheAnnotation: ApiCache by lazy {
-        Annotations::class.java.getDeclaredMethod("getApiCache").getAnnotation(ApiCache::class.java)
+    private val forceCacheCallAnnotation: ForceCacheCall by lazy {
+        Annotations::class.java.getDeclaredMethod("getForceCacheCall")
+            .getAnnotation(ForceCacheCall::class.java)
     }
 
-    @ApiNoCache
-    fun getApiNoCache() = apiNoCacheAnnotation
+    @ForceNetworkCall
+    fun getForceNetworkCall() = forceNetworkCallAnnotation
 
-    @ApiCache
-    fun getApiCache() = apiNoCacheAnnotation
+    @ForceCacheCall
+    fun getForceCacheCall() = forceCacheCallAnnotation
 }
-
 
 
 

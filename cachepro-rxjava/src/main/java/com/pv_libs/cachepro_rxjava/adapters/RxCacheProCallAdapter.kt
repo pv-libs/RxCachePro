@@ -1,10 +1,10 @@
 package com.pv_libs.cachepro_rxjava.adapters
 
 import com.pv_libs.cachepro_rxjava.ApiResult
-import com.pv_libs.cachepro_rxjava.RxApiCaller
-import com.pv_libs.cachepro_rxjava.RxApiCallerImp
 import com.pv_libs.cachepro_rxjava.annotations.Annotations
 import com.pv_libs.cachepro_rxjava.annotations.ApiNoCache
+import com.pv_libs.cachepro_rxjava.api_caller.RxApiCaller
+import com.pv_libs.cachepro_rxjava.api_caller.RxApiCallerImp
 import com.pv_libs.cachepro_rxjava.utils.ReturnTypeInfo
 import com.pv_libs.cachepro_rxjava.utils.add
 import com.pv_libs.cachepro_rxjava.utils.getReturnTypeInfo
@@ -17,7 +17,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import java.lang.reflect.Type
 
-class RxApiCallerAdapter<NetworkResponse>(
+class RxCacheProCallAdapter<NetworkResponse>(
     private val returnTypeInfo: ReturnTypeInfo,
     private val cacheCallAdapter: CallAdapter<NetworkResponse, Single<Response<NetworkResponse>>>,
     private val serverCallAdapter: CallAdapter<NetworkResponse, Single<Response<NetworkResponse>>>
@@ -82,15 +82,15 @@ class RxApiCallerAdapter<NetworkResponse>(
             val cacheCallAdapter = retrofit.nextCallAdapter(
                 this,
                 singleResponseType,
-                annotations.add(ANNOTATIONS.getApiNoCache())
+                annotations.add(ANNOTATIONS.getForceCacheCall())
             ) as CallAdapter<Any?, Single<Response<Any?>>>
             val serverCallAdapter = retrofit.nextCallAdapter(
                 this,
                 singleResponseType,
-                annotations.add(ANNOTATIONS.getApiCache())
+                annotations.add(ANNOTATIONS.getForceNetworkCall())
             ) as CallAdapter<Any?, Single<Response<Any?>>>
 
-            return RxApiCallerAdapter(
+            return RxCacheProCallAdapter(
                 returnTypeInfo,
                 cacheCallAdapter, serverCallAdapter
             )

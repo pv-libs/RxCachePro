@@ -1,6 +1,17 @@
+apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+
+publish {
+    userOrg = 'pv-libs'
+    repoName = 'RxCachePro'
+    groupId = 'com.pv-libs.RxCachePro'
+    artifactId = 'RxCachePro'
+    publishVersion = '0.0.1'
+    desc = 'Android library to take full advantage of HttpCache'
+    website = 'https://github.com/pv-libs/RxCachePro'
+}
 
 android {
     compileSdkVersion 29
@@ -22,6 +33,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
 
 }
 

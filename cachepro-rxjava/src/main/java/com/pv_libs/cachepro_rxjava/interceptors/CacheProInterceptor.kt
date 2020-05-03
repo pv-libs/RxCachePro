@@ -1,32 +1,38 @@
 package com.pv_libs.cachepro_rxjava.interceptors
 
-import android.content.Context
 import com.pv_libs.cachepro_rxjava.annotations.ApiCache
-import com.pv_libs.cachepro_rxjava.utils.CACHE_CONTROL
-import com.pv_libs.cachepro_rxjava.utils.NetworkUtils
-import com.pv_libs.cachepro_rxjava.utils.NoConnectionError
+import com.pv_libs.cachepro_rxjava.annotations.ApiNoCache
+import com.pv_libs.cachepro_rxjava.annotations.ForceCacheCall
+import com.pv_libs.cachepro_rxjava.annotations.ForceNetworkCall
+import com.pv_libs.cachepro_rxjava.utils.*
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class CacheProInterceptor(context: Context) : Interceptor {
-
-    private val networkUtils = NetworkUtils(context)
+internal class CacheProInterceptor(
+    private val networkUtils: NetworkUtils,
+    private val enableOffline: Boolean
+) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         var request = chain.request()
 
 
-        val isAnnotatedAsApiCacheObservable =
-            false // todo request.hasAnnotation(ApiCache::class.java)
+        val isGetRequest = request.method().equals(GET, true)
         val hasInternet = networkUtils.isNetworkConnected
-        val forceCacheCall = request.tag() is ApiCache
+
+        val isAnnotatedAsApiNoCache = request.hasAnnotation(ApiNoCache::class.java)
+        val isAnnotatedAsApiCache = request.hasAnnotation(ApiCache::class.java)
+        val forceCacheCall = request.hasAnnotation(ForceCacheCall::class.java)
+        val forceNetworkCall = request.hasAnnotation(ForceNetworkCall::class.java)
 
 
-        if (!forceCacheCall && isAnnotatedAsApiCacheObservable && !hasInternet) {
+        // can't do network call if there is no internet
+        if (!hasInternet && (!isGetRequest || forceNetworkCall || isAnnotatedAsApiNoCache)) {
             throw NoConnectionError()
         }
+
         //Trying to request cache data when network is not connected
-        if (forceCacheCall || !hasInternet) {
+        if (forceCacheCall || (!hasInternet && enableOffline) || (isAnnotatedAsApiCache && !hasInternet)) {
             // getting data from cache when there no internet
 
             request = request.newBuilder()
@@ -35,4 +41,5 @@ class CacheProInterceptor(context: Context) : Interceptor {
 
         return chain.proceed(request)
     }
+
 }
