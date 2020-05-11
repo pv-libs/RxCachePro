@@ -1,18 +1,15 @@
 # RxCachePro
 
-
 RxCachePro is a Kotlin library, which provide features to take full advantage of HttpCache.
 
-
-If you are already using RxJava2 for network calls, you can optimize your API calls and also enable offline experience with a very few changes
-
+If you are already using RxJava2 for network calls, you can optimize your API calls and also enable offline experience with very few changes.
 
 ### How to include in your project
 
 ###### Add the dependency to your `build.gradle`:
 
 ```groovy
-implementation 'com.pv-libs.RxCachePro:RxCachePro:0.1.0'
+implementation 'com.pv-libs.CachePro:RxCachePro:0.1.0'
 ```
 
 Setup
@@ -97,7 +94,7 @@ class UsersViewModel : ViewModel{
     }
 
     // RxApiCaller also provides a LiveData which informs if there is any network request currently running in background.
-    val inApiRunningLiveData = apiCaller.isApiInProgressLiveData
+    val inApiRunningLiveData = usersListApiCaller.isApiInProgressLiveData
 
 }
 ```
@@ -114,7 +111,7 @@ This applies to every ``GET`` API request, to disable cache for specific API use
 ```kotlin
 @ApiNoCache
 @GET("/api/users")
-fun getUsersListObservable(): Single<Response<GetUsersResponse>>
+fun getUsersListSingle(): Single<Response<GetUsersResponse>>
 ```
 
 
